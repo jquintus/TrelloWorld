@@ -1,4 +1,5 @@
-# TrelloWorld [![Build Status](https://travis-ci.org/jquintus/github-trello.svg)](https://travis-ci.org/jquintus/github-trello)
+# TrelloWorld[![Build Status](https://travis-ci.org/jquintus/TrelloWorld.svg)](https://travis-ci.org/jquintus/TrelloWorld)
+
 A .Net web service to add a comment to a Trello card when committing from Git.
 
 
