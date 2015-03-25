@@ -7,8 +7,8 @@ namespace TrelloWorld.Server.Services
 {
     public class TrelloService
     {
-        private readonly IAsyncTrello _trello;
         private readonly Regex _idRegex;
+        private readonly IAsyncTrello _trello;
 
         public TrelloService(IAsyncTrello trello)
         {
@@ -19,19 +19,27 @@ namespace TrelloWorld.Server.Services
 
         public async Task AddComment(string rawComment)
         {
-            string cardId = ParseId(rawComment);
-            if (string.IsNullOrWhiteSpace(cardId)) return;
+            try
+            {
+                string cardId = ParseId(rawComment);
+                if (string.IsNullOrWhiteSpace(cardId)) return;
 
-            var card = await _trello.Cards.WithId(cardId);
+                var card = await _trello.Cards.WithId(cardId);
 
-            if (card == null) return;
-            await _trello.Cards.AddComment(card, rawComment);
+                if (card == null) return;
+                await _trello.Cards.AddComment(card, rawComment);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
 
         public string ParseId(string rawComment)
         {
             if (string.IsNullOrWhiteSpace(rawComment)) return null;
-            
+
             var match = _idRegex.Match(rawComment);
 
             if (match.Success && match.Groups.Count > 1)
@@ -41,6 +49,5 @@ namespace TrelloWorld.Server.Services
             }
             return null;
         }
-
     }
 }
