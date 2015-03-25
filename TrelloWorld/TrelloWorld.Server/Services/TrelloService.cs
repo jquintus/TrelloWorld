@@ -30,6 +30,8 @@ namespace TrelloWorld.Server.Services
 
         public string ParseId(string rawComment)
         {
+            if (string.IsNullOrWhiteSpace(rawComment)) return null;
+            
             var match = _idRegex.Match(rawComment);
 
             if (match.Success && match.Groups.Count > 1)

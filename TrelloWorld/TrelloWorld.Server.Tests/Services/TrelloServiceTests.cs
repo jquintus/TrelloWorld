@@ -9,26 +9,56 @@ namespace TrelloWorld.Server.Tests.Services
     [TestFixture]
     public class TrelloServiceTests
     {
-        private Mock<IAsyncTrello> _trelloMock;
+        private Mock<IAsyncCards> _cardsMock;
         private TrelloService _service;
+        private Mock<IAsyncTrello> _trelloMock;
 
         [Test]
-        [Ignore]
+        public async Task AddComment_CommentContainsTrelloId_CommentAdded()
+        {
+            // Assemble
+            string comment = "This is my comment Trello(123)";
+            Card card = new Card();
+            _cardsMock.Setup(c => c.WithId("123")).Returns(Task.FromResult(card));
+
+            // Act
+            await _service.AddComment(comment);
+
+            // Assert
+            _cardsMock.Verify(c => c.AddComment(card, comment), Times.Once());
+        }
+
+        [Test]
+        public async Task AddComment_CommentContainsTrelloId_RequestsCardWithThatId()
+        {
+            // Act
+            await _service.AddComment("Trello(abc)");
+
+            // Assert
+            _cardsMock.Verify(c => c.WithId("abc"), Times.Once());
+        }
+
+        [Test]
+        public async Task AddComment_NullCardReturnedFromTrello_AddCommentNotCalled()
+        {
+            // Assemble
+            _cardsMock.Setup(c => c.WithId("abc")).Returns<Card>(null);
+
+            // Act
+            await _service.AddComment("Trello(No card for id)");
+
+            // Assert
+            _cardsMock.Verify(c => c.AddComment(It.IsAny<Card>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
         public async Task AddComment_RawCommentIsNull_DoesNothing()
         {
             // Act
             await _service.AddComment(null);
 
             // Assert
-            _trelloMock.Verify(t => t.Cards.AddComment(It.IsAny<ICardId>(), It.IsAny<string>()), Times.Never);
-
-        }
-
-        [SetUp]
-        public void SetUp()
-        {
-            _trelloMock = new Mock<IAsyncTrello>();
-            _service = new TrelloService(_trelloMock.Object);
+            _cardsMock.Verify(c => c.AddComment(It.IsAny<ICardId>(), It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -36,7 +66,7 @@ namespace TrelloWorld.Server.Tests.Services
         [TestCase("The word trello but no id", null)]
         [TestCase("Trello()", null)]
         [TestCase("", null)]
-
+        [TestCase(null, null)]
         [TestCase("Trello(abc)", "abc")]
         [TestCase("trello(abc)", "abc")]
         [TestCase("trello(Abc)", "Abc")]
@@ -53,6 +83,17 @@ namespace TrelloWorld.Server.Tests.Services
 
             // Assert
             Assert.AreEqual(expected, actual);
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            _cardsMock = new Mock<IAsyncCards>();
+            _trelloMock = new Mock<IAsyncTrello>();
+
+            _trelloMock.SetupGet(t => t.Cards).Returns(_cardsMock.Object);
+
+            _service = new TrelloService(_trelloMock.Object);
         }
     }
 }
