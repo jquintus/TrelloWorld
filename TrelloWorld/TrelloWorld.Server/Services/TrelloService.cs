@@ -5,7 +5,7 @@ using TrelloNet;
 
 namespace TrelloWorld.Server.Services
 {
-    public class TrelloService
+    public class TrelloService : ITrelloService
     {
         private readonly Regex _idRegex;
         private readonly IAsyncTrello _trello;
