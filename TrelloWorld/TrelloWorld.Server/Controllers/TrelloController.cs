@@ -9,12 +9,17 @@ namespace TrelloWorld.Server.Controllers
     {
         private readonly ITrelloService _service;
 
-        public TrelloController(ITrelloService service = null)
+        public TrelloController()
         {
             var config = new Config();
             var trello = new Trello(config.Key);
             trello.Authorize(config.Token);
-            _service = service ?? new TrelloService(trello.Async);
+            _service = new TrelloService(trello.Async);
+        }
+
+        public TrelloController(ITrelloService service)
+        {
+            _service = service;
         }
 
         // POST: api/Trello
