@@ -7,3 +7,6 @@ http://www.nuget.org/packages/TrelloNet/
 https://github.com/dillenmeister/Trello.NET/wiki/Examples
 
 http://trelloworld.azurewebsites.net/
+
+
+https://trello.com/1/connect?key=your app key&name=TrelloWorld&response_type=token&scope=read,write&expiration=never
