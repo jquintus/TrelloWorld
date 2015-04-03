@@ -28,7 +28,7 @@ namespace TrelloWorld.Server.Controllers
 
         public TrelloController(ITrelloService service, IMarkdownService md)
         {
-            var config = new Config();
+            _config = new Config();
             _service = service;
             _md = md;
         }
@@ -36,14 +36,13 @@ namespace TrelloWorld.Server.Controllers
         public async Task<HttpResponseMessage> Get()
         {
             string content;
-
             if (string.IsNullOrWhiteSpace(_config.Key))
             {
                 content = await _md.GetConfigureAppKey();
             }
             else if (string.IsNullOrWhiteSpace(_config.Token))
             {
-                content = await _md.GetConfigureTrelloToken();
+                content = await _md.GetConfigureTrelloToken(_authUrl);
             }
             else
             {

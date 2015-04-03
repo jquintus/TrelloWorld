@@ -12,7 +12,7 @@ namespace TrelloWorld.Server.Services
 
         Task<string> GetConfigureAppKey();
 
-        Task<string> GetConfigureTrelloToken();
+        Task<string> GetConfigureTrelloToken(string trelloUrl);
     }
 
     public class MarkdownService : IMarkdownService
@@ -36,9 +36,9 @@ namespace TrelloWorld.Server.Services
             return await GetMarkdown();
         }
 
-        public async Task<string> GetConfigureTrelloToken()
+        public async Task<string> GetConfigureTrelloToken(string trelloUrl)
         {
-            return await GetMarkdown();
+            return await GetMarkdown(md => string.Format(md, trelloUrl));
         }
 
         private string CleanFileName(string fileName)
@@ -51,13 +51,14 @@ namespace TrelloWorld.Server.Services
             return Path.Combine(_rootPath, fileName + ".md");
         }
 
-        private async Task<string> GetMarkdown([CallerMemberName]string fileName = null)
+        private async Task<string> GetMarkdown(Func<string, string> preprocessMarkDown = null, [CallerMemberName]string fileName = null)
         {
             fileName = CleanFileName(fileName);
 
             using (var reader = new StreamReader(fileName))
             {
                 var raw = await reader.ReadToEndAsync();
+                if (preprocessMarkDown != null) raw = preprocessMarkDown(raw);
                 return _md.Transform(raw);
             }
         }

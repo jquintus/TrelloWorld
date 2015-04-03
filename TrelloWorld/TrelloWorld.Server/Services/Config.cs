@@ -6,7 +6,7 @@ namespace TrelloWorld.Server.Services
     {
         public Config()
         {
-            Key = WebConfigurationManager.AppSettings["Hello.Key"];
+            Key = WebConfigurationManager.AppSettings["Trello.Key"];
             Token = WebConfigurationManager.AppSettings["Trello.Token"];
         }
 
