@@ -37,7 +37,36 @@ namespace TrelloWorld.Server.Controllers
 
             if (string.IsNullOrWhiteSpace(_config.Key))
             {
-                content = "please make sure to configure your key in azure";
+                content = @"<h1>Make sure to configure the Trello app key in Azure </h1>
+                  <h2> Getting the App Key</h2>
+                  The app key can be found on <a href='https://trello.com/app-key'> Trello's Developer Page </a>  <p/>
+                  Paste the value found in the <b>Key</b> section. <p/>
+
+                  <a href='https://trello.com/app-key'>
+                      <img src='Assets/Trello_Developer_Page.png' alt=""Trello's Developer Page"" border='1' />
+                  </a>
+
+                  <h2> Setting the App Key</h2>
+                  Log on to the <a href='https://manage.windowsazure.com/'> Azure Management Portal </a> and go to the configuration tab for this website. <p/>
+                  <img src='Assets/Azure_Config.png' border='1' />
+
+                  <p/>
+
+                  Scroll down to the <b> app settings </b> section and enter a new setting <p/>
+                  <ul>
+                    <li><b>KEY</b>:  Trello.Key</li>
+                    <li><b>VALUE</b>:  [the key you got from Trello]</li>
+                  </ul>
+
+                  <img src='Assets/Azure_AppSettings.png' border='1' />
+                  <p/>
+
+                  <i>Note:  </i> Trello.Token will be filled in durin the next step.
+
+                  <h2> Next Steps</h2>
+                  Once you complete this step, refresh the page.  If you did everything right you will see the next steps.
+
+";
             }
             else if (string.IsNullOrWhiteSpace(_config.Token))
             {

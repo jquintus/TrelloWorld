@@ -80,6 +80,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Azure_Config.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Trello_Developer_Page.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
