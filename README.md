@@ -6,6 +6,7 @@ TrelloWorld is a web service that allows you to automatically add comments to Tr
 Installation instructions can be found on the [wiki](../../wiki).  Once everything is configured, all you need to do is append Trello(cardid) to a commit.  
 
 For example this commit comment:
+
     Made flux capacitor more efficient.  
     Flux capicitor only needs 1.12 gigawats
     Trello(YL2Iyg4I)
