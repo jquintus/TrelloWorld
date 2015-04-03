@@ -83,6 +83,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Azure_AppSettings.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Azure_Config.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -101,10 +104,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Config.cs" />
     <Compile Include="Services\ITrelloService.cs" />
+    <Compile Include="Services\MarkdownService.cs" />
     <Compile Include="Services\TrelloService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="MarkdownViews\ConfigureAppKey.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

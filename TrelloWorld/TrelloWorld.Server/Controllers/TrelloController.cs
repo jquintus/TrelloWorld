@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using MarkdownSharp;
 using TrelloNet;
@@ -30,7 +31,7 @@ namespace TrelloWorld.Server.Controllers
             _service = service;
         }
 
-        public HttpResponseMessage Get()
+        public async Task<HttpResponseMessage> Get()
         {
             var response = new HttpResponseMessage();
 
@@ -38,42 +39,7 @@ namespace TrelloWorld.Server.Controllers
 
             if (string.IsNullOrWhiteSpace(_config.Key))
             {
-
-
-                Markdown md = new Markdown();
-
-                content = md.Transform(@"
-##  Make sure to configure the Trello app key in Azure  ##
-
-### Getting the App Key ###
-
-The app key can be found on [Trello's Developer Page](https://trello.com/app-key) 
-
-Paste the value found in the **Key** section. 
-
-![Trello's Developer Page](Assets/Trello_Developer_Page.png)
-
-### Setting the App Key ###
-Log on to the [Azure Management Portal](https://manage.windowsazure.com/)  and go to the configuration tab for this website. 
-
-![](Assets/Azure_Config.png)
-
-
-Scroll down to the **app settings** section and enter a new setting 
-
-- **KEY**:  Trello.Key
-- **VALUE**:  [the key you got from Trello]
-
-![](Assets/Azure_AppSettings.png)
-
-
-*Note*: Trello.Token will be filled in durin the next step.
-
-### Next Steps ###
-Once you complete this step, refresh the page.  If you did everything right you will see the next steps. 
-
-                    
-                    ");
+                content = await new MarkdownService(HttpContext.Current.Server.MapPath("~/MarkdownViews")).GetConfigureAppKey();
             }
             else if (string.IsNullOrWhiteSpace(_config.Token))
             {
