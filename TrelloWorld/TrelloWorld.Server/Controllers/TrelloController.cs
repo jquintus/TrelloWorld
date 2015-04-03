@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
+using MarkdownSharp;
 using TrelloNet;
 using TrelloWorld.Server.Services;
 
@@ -37,36 +38,42 @@ namespace TrelloWorld.Server.Controllers
 
             if (string.IsNullOrWhiteSpace(_config.Key))
             {
-                content = @"<h1>Make sure to configure the Trello app key in Azure </h1>
-                  <h2> Getting the App Key</h2>
-                  The app key can be found on <a href='https://trello.com/app-key'> Trello's Developer Page </a>  <p/>
-                  Paste the value found in the <b>Key</b> section. <p/>
 
-                  <a href='https://trello.com/app-key'>
-                      <img src='Assets/Trello_Developer_Page.png' alt=""Trello's Developer Page"" border='1' />
-                  </a>
 
-                  <h2> Setting the App Key</h2>
-                  Log on to the <a href='https://manage.windowsazure.com/'> Azure Management Portal </a> and go to the configuration tab for this website. <p/>
-                  <img src='Assets/Azure_Config.png' border='1' />
+                Markdown md = new Markdown();
 
-                  <p/>
+                content = md.Transform(@"
+##  Make sure to configure the Trello app key in Azure  ##
 
-                  Scroll down to the <b> app settings </b> section and enter a new setting <p/>
-                  <ul>
-                    <li><b>KEY</b>:  Trello.Key</li>
-                    <li><b>VALUE</b>:  [the key you got from Trello]</li>
-                  </ul>
+### Getting the App Key ###
 
-                  <img src='Assets/Azure_AppSettings.png' border='1' />
-                  <p/>
+The app key can be found on [Trello's Developer Page](https://trello.com/app-key) 
 
-                  <i>Note:  </i> Trello.Token will be filled in durin the next step.
+Paste the value found in the **Key** section. 
 
-                  <h2> Next Steps</h2>
-                  Once you complete this step, refresh the page.  If you did everything right you will see the next steps.
+![Trello's Developer Page](Assets/Trello_Developer_Page.png)
 
-";
+### Setting the App Key ###
+Log on to the [Azure Management Portal](https://manage.windowsazure.com/)  and go to the configuration tab for this website. 
+
+![](Assets/Azure_Config.png)
+
+
+Scroll down to the **app settings** section and enter a new setting 
+
+- **KEY**:  Trello.Key
+- **VALUE**:  [the key you got from Trello]
+
+![](Assets/Azure_AppSettings.png)
+
+
+*Note*: Trello.Token will be filled in durin the next step.
+
+### Next Steps ###
+Once you complete this step, refresh the page.  If you did everything right you will see the next steps. 
+
+                    
+                    ");
             }
             else if (string.IsNullOrWhiteSpace(_config.Token))
             {
