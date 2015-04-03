@@ -116,6 +116,7 @@
     <Content Include="Assets\Trello_ExportCard.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Trello_SampleCard.png" />
     <Content Include="Assets\Trello_Token.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
