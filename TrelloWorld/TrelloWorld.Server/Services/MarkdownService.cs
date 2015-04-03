@@ -1,12 +1,18 @@
 ﻿using MarkdownSharp;
+using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace TrelloWorld.Server.Services
 {
     public interface IMarkdownService
     {
+        Task<string> GetConfigurationComplete();
+
         Task<string> GetConfigureAppKey();
+
+        Task<string> GetConfigureTrelloToken();
     }
 
     public class MarkdownService : IMarkdownService
@@ -20,13 +26,35 @@ namespace TrelloWorld.Server.Services
             _md = new Markdown();
         }
 
-        public async Task<string> GetConfigureAppKey()
+        public async Task<string> GetConfigurationComplete()
         {
-            return await GetMarkdown(Path.Combine(_rootPath, "ConfigureAppKey.md"));
+            return await GetMarkdown();
         }
 
-        private async Task<string> GetMarkdown(string fileName)
+        public async Task<string> GetConfigureAppKey()
         {
+            return await GetMarkdown();
+        }
+
+        public async Task<string> GetConfigureTrelloToken()
+        {
+            return await GetMarkdown();
+        }
+
+        private string CleanFileName(string fileName)
+        {
+            if (fileName == null) throw new ArgumentNullException("fileName");
+            if (fileName.StartsWith("Get"))
+            {
+                fileName = fileName.Substring(3);
+            }
+            return Path.Combine(_rootPath, fileName + ".md");
+        }
+
+        private async Task<string> GetMarkdown([CallerMemberName]string fileName = null)
+        {
+            fileName = CleanFileName(fileName);
+
             using (var reader = new StreamReader(fileName))
             {
                 var raw = await reader.ReadToEndAsync();

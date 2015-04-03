@@ -12,6 +12,7 @@ namespace TrelloWorld.Server.Tests.Controllers
     public class TrelloControllerTests
     {
         private TrelloController _controller;
+        private Mock<IMarkdownService> _md;
         private Mock<ITrelloService> _service;
 
         [Test]
@@ -114,7 +115,8 @@ namespace TrelloWorld.Server.Tests.Controllers
         public void SetUp()
         {
             _service = new Mock<ITrelloService>();
-            _controller = new TrelloController(_service.Object);
+            _md = new Mock<IMarkdownService>();
+            _controller = new TrelloController(_service.Object, _md.Object);
         }
     }
 }

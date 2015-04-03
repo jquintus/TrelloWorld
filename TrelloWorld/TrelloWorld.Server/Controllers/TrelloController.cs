@@ -3,7 +3,6 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using MarkdownSharp;
 using TrelloNet;
 using TrelloWorld.Server.Services;
 
@@ -13,6 +12,7 @@ namespace TrelloWorld.Server.Controllers
     {
         private readonly string _authUrl;
         private readonly Config _config;
+        private readonly IMarkdownService _md;
         private readonly ITrelloService _service;
 
         public TrelloController()
@@ -23,30 +23,35 @@ namespace TrelloWorld.Server.Controllers
 
             _authUrl = trello.GetAuthorizationUrl("TrelloWorld", Scope.ReadWrite, Expiration.Never).ToString();
             _service = new TrelloService(trello.Async);
+            _md = new MarkdownService(HttpContext.Current.Server.MapPath("~/MarkdownViews"));
         }
 
-        public TrelloController(ITrelloService service)
+        public TrelloController(ITrelloService service, IMarkdownService md)
         {
             var config = new Config();
             _service = service;
+            _md = md;
         }
 
         public async Task<HttpResponseMessage> Get()
         {
-            var response = new HttpResponseMessage();
-
-            string content = "Setup complete.";
+            string content;
 
             if (string.IsNullOrWhiteSpace(_config.Key))
             {
-                content = await new MarkdownService(HttpContext.Current.Server.MapPath("~/MarkdownViews")).GetConfigureAppKey();
+                content = await _md.GetConfigureAppKey();
             }
             else if (string.IsNullOrWhiteSpace(_config.Token))
             {
-                content = string.Format("Get your secret token from <a herf='{0}'> Trello </a> ", _authUrl);
+                content = await _md.GetConfigureTrelloToken();
+            }
+            else
+            {
+                content = await _md.GetConfigurationComplete();
             }
 
-            response.Content = new StringContent(string.Format("<html><body>{0}</body></html>", content));
+            var response = new HttpResponseMessage();
+            response.Content = new StringContent(content);
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
             return response;
         }

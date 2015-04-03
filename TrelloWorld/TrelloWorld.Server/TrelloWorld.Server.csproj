@@ -110,6 +110,8 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="MarkdownViews\ConfigureAppKey.md" />
+    <Content Include="MarkdownViews\ConfigurationComplete.md" />
+    <Content Include="MarkdownViews\ConfigureTrelloToken.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
