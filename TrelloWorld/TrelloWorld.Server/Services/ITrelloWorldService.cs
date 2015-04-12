@@ -2,9 +2,11 @@
 
 namespace TrelloWorld.Server.Services
 {
+    using Models;
+
     public interface ITrelloWorldService
     {
-        Task AddComment(string rawComment);
+        Task AddComment(Commit rawComment);
 
         string AuthUrl { get; }
     }

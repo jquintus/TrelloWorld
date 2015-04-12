@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\TrelloModuleTests.cs" />
+    <Compile Include="Services\CommitParserTests.cs" />
     <Compile Include="Services\TrelloControllerServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\TrelloServiceTests.cs" />
@@ -79,9 +80,15 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="SampleData\CommitOnBranch2.json" />
-    <None Include="SampleData\CommitOnMaster.json" />
-    <None Include="SampleData\MultipleCommitsOnMaster.json" />
+    <None Include="SampleData\CommitOnBranch2.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SampleData\CommitOnMaster.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SampleData\MultipleCommitsOnMaster.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TrelloWorld.Server.Tests.csproj.vsspell" />
   </ItemGroup>
   <ItemGroup>

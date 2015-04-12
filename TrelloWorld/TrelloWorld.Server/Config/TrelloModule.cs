@@ -28,6 +28,7 @@
             // Services
             k.Bind<ITrelloWorldService>().To<TrelloWorldService>().InSingletonScope();
             k.Bind<IMarkdownService>().To<MarkdownService>().InSingletonScope();
+            k.Bind<ICommitParser>().To<CommitParser>().InSingletonScope();
 
             // Root
             k.Bind<ITrelloController>().To<TrelloControllerService>().InSingletonScope();

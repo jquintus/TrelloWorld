@@ -11,7 +11,7 @@
     {
       "id": "ec29f7be4762c722f5dbc452fe2a3735b538fee7",
       "distinct": true,
-      "message": "Resharper celanup",
+      "message": "Resharper clean up",
       "timestamp": "2015-04-10T17:20:40-04:00",
       "url": "https://github.com/jquintus/spikes/commit/ec29f7be4762c722f5dbc452fe2a3735b538fee7",
       "author": {
@@ -41,7 +41,7 @@
   "head_commit": {
     "id": "ec29f7be4762c722f5dbc452fe2a3735b538fee7",
     "distinct": true,
-    "message": "Resharper celanup",
+    "message": "Resharper clean up",
     "timestamp": "2015-04-10T17:20:40-04:00",
     "url": "https://github.com/jquintus/spikes/commit/ec29f7be4762c722f5dbc452fe2a3735b538fee7",
     "author": {

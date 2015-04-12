@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TrelloNet;
 
 namespace TrelloWorld.Server.Services
 {
+    using Models;
+
     public class TrelloWorldService : ITrelloWorldService
     {
         private readonly IAsyncTrello _asyncTrello;
-        private readonly Regex _idRegex;
         private readonly ITrello _trello;
 
         public TrelloWorldService(ITrello trello, IAsyncTrello asyncTrello)
@@ -18,7 +18,6 @@ namespace TrelloWorld.Server.Services
 
             _trello = trello;
             _asyncTrello = asyncTrello;
-            _idRegex = new Regex(@"trello\(\s*(\w+)\s*\)", RegexOptions.IgnoreCase);
         }
 
         public string AuthUrl
@@ -26,37 +25,22 @@ namespace TrelloWorld.Server.Services
             get { return _trello.GetAuthorizationUrl("TrelloWorld", Scope.ReadWrite, Expiration.Never).ToString(); }
         }
 
-        public async Task AddComment(string rawComment)
+        public async Task AddComment(Commit commit)
         {
             try
             {
-                string cardId = ParseId(rawComment);
-                if (string.IsNullOrWhiteSpace(cardId)) return;
+                if (commit == null || string.IsNullOrWhiteSpace(commit.CardId)) return;
 
-                var card = await _asyncTrello.Cards.WithId(cardId);
+                var card = await _asyncTrello.Cards.WithId(commit.CardId);
 
                 if (card == null) return;
-                await _asyncTrello.Cards.AddComment(card, rawComment);
+                await _asyncTrello.Cards.AddComment(card, commit.Message);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
                 throw;
             }
-        }
-
-        public string ParseId(string rawComment)
-        {
-            if (string.IsNullOrWhiteSpace(rawComment)) return null;
-
-            var match = _idRegex.Match(rawComment);
-
-            if (match.Success && match.Groups.Count > 1)
-            {
-                string id = match.Groups[1].Value;
-                return id.Trim();
-            }
-            return null;
         }
     }
 }

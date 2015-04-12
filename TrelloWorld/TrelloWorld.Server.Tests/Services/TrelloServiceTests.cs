@@ -6,37 +6,51 @@ using TrelloWorld.Server.Services;
 
 namespace TrelloWorld.Server.Tests.Services
 {
+    using Models;
+
     [TestFixture]
     public class TrelloServiceTests
     {
+        private Mock<IAsyncTrello> _asyncTrelloMock;
         private Mock<IAsyncCards> _cardsMock;
         private TrelloWorldService _service;
-        private Mock<IAsyncTrello> _asyncTrelloMock;
         private Mock<ITrello> _TrelloMock;
 
         [Test]
         public async Task AddComment_CommentContainsTrelloId_CommentAdded()
         {
             // Assemble
-            string comment = "This is my comment Trello(123)";
+            Commit commit = new Commit
+            {
+                Message = "This is my comment Trello(123)",
+                CardId = "123"
+            };
+
             Card card = new Card();
             _cardsMock.Setup(c => c.WithId("123")).Returns(Task.FromResult(card));
 
             // Act
-            await _service.AddComment(comment);
+            await _service.AddComment(commit);
 
             // Assert
-            _cardsMock.Verify(c => c.AddComment(card, comment), Times.Once());
+            _cardsMock.Verify(c => c.AddComment(card, commit.Message), Times.Once());
         }
 
         [Test]
         public async Task AddComment_CommentContainsTrelloId_RequestsCardWithThatId()
         {
+            // Assemble
+            Commit commit = new Commit
+            {
+                Message = "This is my comment Trello(123)",
+                CardId = "123"
+            };
+
             // Act
-            await _service.AddComment("Trello(abc)");
+            await _service.AddComment(commit);
 
             // Assert
-            _cardsMock.Verify(c => c.WithId("abc"), Times.Once());
+            _cardsMock.Verify(c => c.WithId("123"), Times.Once());
         }
 
         [Test]
@@ -46,7 +60,7 @@ namespace TrelloWorld.Server.Tests.Services
             _cardsMock.Setup(c => c.WithId("abc")).Returns<Card>(null);
 
             // Act
-            await _service.AddComment("Trello(No card for id)");
+            await _service.AddComment(new Commit());
 
             // Assert
             _cardsMock.Verify(c => c.AddComment(It.IsAny<Card>(), It.IsAny<string>()), Times.Never());
@@ -62,29 +76,7 @@ namespace TrelloWorld.Server.Tests.Services
             _cardsMock.Verify(c => c.AddComment(It.IsAny<ICardId>(), It.IsAny<string>()), Times.Never);
         }
 
-        [Test]
-        [TestCase("Comments but no id", null)]
-        [TestCase("The word trello but no id", null)]
-        [TestCase("Trello()", null)]
-        [TestCase("", null)]
-        [TestCase(null, null)]
-        [TestCase("Trello(abc)", "abc")]
-        [TestCase("trello(abc)", "abc")]
-        [TestCase("trello(Abc)", "Abc")]
-        [TestCase("trello(123)", "123")]
-        [TestCase("trello(abc123)", "abc123")]
-        [TestCase("Comments before the id trello(abc)", "abc")]
-        [TestCase("Comments before the id trello(abc) and after the id", "abc")]
-        [TestCase("trello(abc) comments after the id", "abc")]
-        [TestCase("trello( abc )", "abc")]
-        public void ParseId(string comment, string expected)
-        {
-            // Act
-            string actual = _service.ParseId(comment);
 
-            // Assert
-            Assert.AreEqual(expected, actual);
-        }
 
         [SetUp]
         public void SetUp()

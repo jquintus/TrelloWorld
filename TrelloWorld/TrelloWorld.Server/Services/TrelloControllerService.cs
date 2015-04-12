@@ -11,12 +11,14 @@
         private readonly Settings _config;
         private readonly IMarkdownService _md;
         private readonly ITrelloWorldService _service;
+        private readonly ICommitParser _parser;
 
-        public TrelloControllerService(Settings config, ITrelloWorldService service, IMarkdownService md)
+        public TrelloControllerService(Settings config, ITrelloWorldService service, IMarkdownService md, ICommitParser parser)
         {
             _config = config;
             _service = service;
             _md = md;
+            _parser = parser;
         }
 
         public async Task<HttpResponseMessage> Get()
@@ -43,12 +45,11 @@
 
         public async Task Post([FromBody]dynamic value)
         {
-            dynamic commits = value.commits;
+            var commits = _parser.Parse(value);
 
-            foreach (dynamic comit in commits)
+            foreach (var commit in commits)
             {
-                string msg = comit.message;
-                await _service.AddComment(msg);
+                await _service.AddComment(commit);
             }
         }
     }
