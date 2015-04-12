@@ -22,6 +22,7 @@
                 Token = WebConfigurationManager.AppSettings["Trello.Token"],
                 Branches = ReadList("Trello.Branches"),
                 IncludeLinkToCommit = ReadBool("Trello.IncludeLinkToCommit"),
+                CardIdRegex = ReadString("Trello.CardIdRegex", Settings.DEFAULT_CARD_ID_REGEX),
             };
         }
 
@@ -30,20 +31,26 @@
             var stringValue = WebConfigurationManager.AppSettings[key];
             if (string.IsNullOrWhiteSpace(stringValue)) return defaultValue;
 
-            bool value = defaultValue;
-            if (bool.TryParse(stringValue, out value))
-            {
-                return value;
-            }
-            return defaultValue;
+            bool value;
+            return bool.TryParse(stringValue, out value) 
+                ? value 
+                : defaultValue;
         }
 
         private List<string> ReadList(string key)
         {
             var value = WebConfigurationManager.AppSettings[key];
-            if (string.IsNullOrWhiteSpace(value)) return new List<string>();
+            return string.IsNullOrWhiteSpace(value) 
+                ? new List<string>() 
+                : value.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        }
 
-            return value.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        private string ReadString(string key, string defaultValue = "")
+        {
+            var value = WebConfigurationManager.AppSettings[key];
+            return string.IsNullOrWhiteSpace(value)
+                ? defaultValue
+                : value;
         }
     }
 }

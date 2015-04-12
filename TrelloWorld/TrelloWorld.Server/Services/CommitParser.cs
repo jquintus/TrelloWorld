@@ -15,7 +15,7 @@ namespace TrelloWorld.Server.Services
         public CommitParser(Settings settings)
         {
             _settings = settings;
-            _idRegex = new Regex(@"trello\(\s*(\w+)\s*\)", RegexOptions.IgnoreCase);
+            _idRegex = new Regex(settings.CardIdRegex, RegexOptions.IgnoreCase);
         }
 
         public IEnumerable<Commit> Parse(dynamic push)
@@ -46,7 +46,7 @@ namespace TrelloWorld.Server.Services
 
             if (match.Success && match.Groups.Count > 1)
             {
-                string id = match.Groups[1].Value;
+                string id = match.Groups["cardId"].Value;
                 return id.Trim();
             }
             return null;

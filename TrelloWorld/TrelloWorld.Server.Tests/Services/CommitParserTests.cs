@@ -169,7 +169,10 @@
         [SetUp]
         public void SetUp()
         {
-            _settings = new Settings();
+            _settings = new Settings
+            {
+                CardIdRegex = Settings.DEFAULT_CARD_ID_REGEX,
+            };
             _parser = new CommitParser(_settings);
         }
 
