@@ -10,7 +10,7 @@ namespace TrelloWorld.Server.Tests.Services
     public class TrelloServiceTests
     {
         private Mock<IAsyncCards> _cardsMock;
-        private TrelloService _service;
+        private TrelloWorldService _service;
         private Mock<IAsyncTrello> _trelloMock;
 
         [Test]
@@ -93,7 +93,7 @@ namespace TrelloWorld.Server.Tests.Services
 
             _trelloMock.SetupGet(t => t.Cards).Returns(_cardsMock.Object);
 
-            _service = new TrelloService(_trelloMock.Object);
+            _service = new TrelloWorldService(_trelloMock.Object);
         }
     }
 }

@@ -6,23 +6,16 @@ using System.Threading.Tasks;
 
 namespace TrelloWorld.Server.Services
 {
-    public interface IMarkdownService
-    {
-        Task<string> GetConfigurationComplete();
-
-        Task<string> GetConfigureAppKey();
-
-        Task<string> GetConfigureTrelloToken(string trelloUrl);
-    }
+    using Config;
 
     public class MarkdownService : IMarkdownService
     {
         private readonly Markdown _md;
         private readonly string _rootPath;
 
-        public MarkdownService(string rootPath)
+        public MarkdownService(Settings settings)
         {
-            _rootPath = rootPath;
+            _rootPath = settings.MarkdownRootPath;
             _md = new Markdown();
         }
 

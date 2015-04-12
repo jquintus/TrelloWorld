@@ -46,6 +46,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
     </Reference>
@@ -125,15 +128,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Services\ITrelloController.cs" />
     <Compile Include="Controllers\TrelloController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Config.cs" />
-    <Compile Include="Services\ITrelloService.cs" />
+    <Compile Include="Config\Settings.cs" />
+    <Compile Include="Services\IMarkdownService.cs" />
+    <Compile Include="Services\ISettingsLoader.cs" />
+    <Compile Include="Services\ITrelloWorldService.cs" />
     <Compile Include="Services\MarkdownService.cs" />
-    <Compile Include="Services\TrelloService.cs" />
+    <Compile Include="Services\SettingsLoader.cs" />
+    <Compile Include="Services\TrelloControllerService.cs" />
+    <Compile Include="Services\TrelloWorldService.cs" />
+    <Compile Include="Config\TrelloModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

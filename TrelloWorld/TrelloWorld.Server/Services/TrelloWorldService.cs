@@ -5,16 +5,25 @@ using TrelloNet;
 
 namespace TrelloWorld.Server.Services
 {
-    public class TrelloService : ITrelloService
+    public class TrelloWorldService : ITrelloWorldService
     {
+        private readonly IAsyncTrello _asyncTrello;
         private readonly Regex _idRegex;
-        private readonly IAsyncTrello _trello;
+        private readonly ITrello _trello;
 
-        public TrelloService(IAsyncTrello trello)
+        public TrelloWorldService(ITrello trello, IAsyncTrello asyncTrello)
         {
+            if (asyncTrello == null) throw new ArgumentNullException();
             if (trello == null) throw new ArgumentNullException();
+
             _trello = trello;
+            _asyncTrello = asyncTrello;
             _idRegex = new Regex(@"trello\(\s*(\w+)\s*\)", RegexOptions.IgnoreCase);
+        }
+
+        public string AuthUrl
+        {
+            get { return _trello.GetAuthorizationUrl("TrelloWorld", Scope.ReadWrite, Expiration.Never).ToString(); }
         }
 
         public async Task AddComment(string rawComment)
@@ -24,10 +33,10 @@ namespace TrelloWorld.Server.Services
                 string cardId = ParseId(rawComment);
                 if (string.IsNullOrWhiteSpace(cardId)) return;
 
-                var card = await _trello.Cards.WithId(cardId);
+                var card = await _asyncTrello.Cards.WithId(cardId);
 
                 if (card == null) return;
-                await _trello.Cards.AddComment(card, rawComment);
+                await _asyncTrello.Cards.AddComment(card, rawComment);
             }
             catch (Exception ex)
             {

@@ -1,19 +1,18 @@
-﻿using Moq;
-using NUnit.Framework;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Threading.Tasks;
-using TrelloWorld.Server.Controllers;
-using TrelloWorld.Server.Services;
-
-namespace TrelloWorld.Server.Tests.Controllers
+﻿namespace TrelloWorld.Server.Tests.Services
 {
+    using System.Collections.Generic;
+    using System.Dynamic;
+    using System.Threading.Tasks;
+    using Moq;
+    using NUnit.Framework;
+    using Server.Services;
+
     [TestFixture]
-    public class TrelloControllerTests
+    public class TrelloControllerServiceTests
     {
-        private TrelloController _controller;
+        private TrelloControllerService _controller;
         private Mock<IMarkdownService> _md;
-        private Mock<ITrelloService> _service;
+        private Mock<ITrelloWorldService> _service;
 
         [Test]
         public async Task Post_CommitListEmpty_AddCommitNotCalled()
@@ -56,7 +55,7 @@ namespace TrelloWorld.Server.Tests.Controllers
             dynamic msg1 = new ExpandoObject();
             msg1.message = "msg1";
 
-            value.commits = new List<dynamic>()
+            value.commits = new List<dynamic>
             {
                msg1,
             };
@@ -76,7 +75,7 @@ namespace TrelloWorld.Server.Tests.Controllers
             // Assemble
             dynamic value = new ExpandoObject();
             dynamic msg1 = new ExpandoObject();
-            value.commits = new List<dynamic>()
+            value.commits = new List<dynamic>
             {
                msg1,
             };
@@ -96,7 +95,7 @@ namespace TrelloWorld.Server.Tests.Controllers
             dynamic msg2 = new ExpandoObject();
             msg2.message = "msg2";
 
-            value.commits = new List<dynamic>()
+            value.commits = new List<dynamic>
             {
                msg1,
                msg2,
@@ -114,9 +113,9 @@ namespace TrelloWorld.Server.Tests.Controllers
         [SetUp]
         public void SetUp()
         {
-            _service = new Mock<ITrelloService>();
+            _service = new Mock<ITrelloWorldService>();
             _md = new Mock<IMarkdownService>();
-            _controller = new TrelloController(_service.Object, _md.Object);
+            _controller = new TrelloControllerService(_service.Object, _md.Object);
         }
     }
 }
