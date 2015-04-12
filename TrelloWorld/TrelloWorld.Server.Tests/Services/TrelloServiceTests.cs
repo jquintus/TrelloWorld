@@ -11,7 +11,8 @@ namespace TrelloWorld.Server.Tests.Services
     {
         private Mock<IAsyncCards> _cardsMock;
         private TrelloWorldService _service;
-        private Mock<IAsyncTrello> _trelloMock;
+        private Mock<IAsyncTrello> _asyncTrelloMock;
+        private Mock<ITrello> _TrelloMock;
 
         [Test]
         public async Task AddComment_CommentContainsTrelloId_CommentAdded()
@@ -89,11 +90,12 @@ namespace TrelloWorld.Server.Tests.Services
         public void SetUp()
         {
             _cardsMock = new Mock<IAsyncCards>();
-            _trelloMock = new Mock<IAsyncTrello>();
+            _asyncTrelloMock = new Mock<IAsyncTrello>();
+            _TrelloMock = new Mock<ITrello>();
 
-            _trelloMock.SetupGet(t => t.Cards).Returns(_cardsMock.Object);
+            _asyncTrelloMock.SetupGet(t => t.Cards).Returns(_cardsMock.Object);
 
-            _service = new TrelloWorldService(_trelloMock.Object);
+            _service = new TrelloWorldService(_TrelloMock.Object, _asyncTrelloMock.Object);
         }
     }
 }

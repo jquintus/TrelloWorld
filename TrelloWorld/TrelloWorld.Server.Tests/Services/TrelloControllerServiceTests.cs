@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using Moq;
     using NUnit.Framework;
+    using Server.Config;
     using Server.Services;
 
     [TestFixture]
@@ -13,6 +14,7 @@
         private TrelloControllerService _controller;
         private Mock<IMarkdownService> _md;
         private Mock<ITrelloWorldService> _service;
+        private Settings _settings;
 
         [Test]
         public async Task Post_CommitListEmpty_AddCommitNotCalled()
@@ -115,7 +117,8 @@
         {
             _service = new Mock<ITrelloWorldService>();
             _md = new Mock<IMarkdownService>();
-            _controller = new TrelloControllerService(_service.Object, _md.Object);
+            _settings = new Settings();
+            _controller = new TrelloControllerService(_settings, _service.Object, _md.Object);
         }
     }
 }
