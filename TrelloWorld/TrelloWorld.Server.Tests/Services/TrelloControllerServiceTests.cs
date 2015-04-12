@@ -30,7 +30,8 @@
 
             // Assert
             _service.Verify(s => s.AddComment(It.IsAny<Commit>()), Times.Never);
-        }
+        
+
 
         [Test]
         public async Task Post_CommitOnNonMonitoredBranch_DoesNothing()
