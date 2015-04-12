@@ -92,12 +92,15 @@ namespace TrelloWorld.Server.Services
 
         private string FormatMessage(string rawMsg, string gitUrl)
         {
+            if (!_settings.IncludeCardId)
+            {
+                rawMsg = _idRegex.Replace(rawMsg, string.Empty);
+            }
             if (_settings.IncludeLinkToCommit)
             {
                 rawMsg += Environment.NewLine + gitUrl;
             }
-
-            return rawMsg;
+            return rawMsg.Trim();
         }
 
         private IEnumerable<Commit> UnSafeParse(dynamic push)

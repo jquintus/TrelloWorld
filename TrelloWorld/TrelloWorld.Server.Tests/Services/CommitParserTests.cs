@@ -167,6 +167,24 @@
             Assert.AreEqual(expected, commits.First().Message);
         }
 
+        [Test]
+        [TestCase(true, "My message\r\nTrello(abc)")]
+        [TestCase(false, "My message")]
+        public void ParseMessage_IncludeCardId_AppendsUrlToMessage(bool includeCardId, string expected)
+        {
+            // Assemble
+            dynamic push = JObject.Parse(SIMPLE_JSON);
+            push.commits[0].message = @"My message
+Trello(abc)";
+            _settings.IncludeCardId = includeCardId;
+
+            // Act
+            List<Commit> commits = _parser.Parse(push);
+
+            // Assert
+            Assert.AreEqual(expected, commits.First().Message);
+        }
+
         [SetUp]
         public void SetUp()
         {

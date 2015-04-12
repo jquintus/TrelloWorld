@@ -22,6 +22,7 @@
                 Token = WebConfigurationManager.AppSettings["Trello.Token"],
                 Branches = ReadList("Trello.Branches"),
                 IncludeLinkToCommit = ReadBool("Trello.IncludeLinkToCommit"),
+                IncludeCardId = ReadBool("Trello.IncludeCardId"),
                 CardIdRegex = ReadString("Trello.CardIdRegex", Settings.DEFAULT_CARD_ID_REGEX),
             };
         }

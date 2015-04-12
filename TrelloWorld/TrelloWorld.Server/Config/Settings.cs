@@ -16,6 +16,8 @@
 
         public string MarkdownRootPath { get; set; }
 
+        public bool IncludeCardId{ get; set; }
+
         public string Token { get; set; }
     }
 }
