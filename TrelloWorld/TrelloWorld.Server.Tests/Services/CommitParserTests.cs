@@ -3,15 +3,29 @@
     using Models;
     using Newtonsoft.Json.Linq;
     using NUnit.Framework;
+    using Server.Config;
     using Server.Services;
     using System.Collections.Generic;
     using System.Dynamic;
     using System.IO;
+    using System.Linq;
 
     [TestFixture]
     public class CommitParserTests
     {
+        private const string SIMPLE_JSON = @"{
+  'ref': 'refs/heads/branch2',
+  'commits': [
+    {
+      'message': 'My message',
+      'url': 'https://github.com/jquintus/spikes/commit/2',
+    }
+  ]
+}";
+
         private CommitParser _parser;
+
+        private Settings _settings;
 
         [Test]
         public void Parse_CommitOnBranch2_ReturnsOneCommitOnBranch2()
@@ -59,7 +73,6 @@
             CollectionAssert.AreEqual(expected, actual);
         }
 
-
         [Test]
         public void Parse_MultipleCommitsOnMaster_ReturnsOneCommitOnMaster()
         {
@@ -73,7 +86,6 @@
                     CardId = null,
                     Message = "noop",
                     CommitUrl = @"https://github.com/jquintus/spikes/commit/629b493f34631ddc43f71421a35b2688619647c8",
-
                 },
                 new Commit
                 {
@@ -138,10 +150,27 @@
             Assert.AreEqual(expected, actual);
         }
 
+        [Test]
+        [TestCase(true, "My message\r\nhttps://github.com/jquintus/spikes/commit/2")]
+        [TestCase(false, "My message")]
+        public void ParseMessage_IncludeGitUrl_AppendsUrlToMessage(bool includeLinkToCommit, string expected)
+        {
+            // Assemble
+            dynamic push = JObject.Parse(SIMPLE_JSON);
+            _settings.IncludeLinkToCommit = includeLinkToCommit;
+
+            // Act
+            List<Commit> commits = _parser.Parse(push);
+
+            // Assert
+            Assert.AreEqual(expected, commits.First().Message);
+        }
+
         [SetUp]
         public void SetUp()
         {
-            _parser = new CommitParser();
+            _settings = new Settings();
+            _parser = new CommitParser(_settings);
         }
 
         private dynamic ParseFromFile(string path)

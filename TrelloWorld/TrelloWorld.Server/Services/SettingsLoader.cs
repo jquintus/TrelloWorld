@@ -17,11 +17,25 @@
 
             return new Settings()
             {
+                MarkdownRootPath = root,
                 Key = WebConfigurationManager.AppSettings["Trello.Key"],
                 Token = WebConfigurationManager.AppSettings["Trello.Token"],
                 Branches = ReadList("Trello.Branches"),
-                MarkdownRootPath = root,
+                IncludeLinkToCommit = ReadBool("Trello.IncludeLinkToCommit"),
             };
+        }
+
+        private bool ReadBool(string key, bool defaultValue = false)
+        {
+            var stringValue = WebConfigurationManager.AppSettings[key];
+            if (string.IsNullOrWhiteSpace(stringValue)) return defaultValue;
+
+            bool value = defaultValue;
+            if (bool.TryParse(stringValue, out value))
+            {
+                return value;
+            }
+            return defaultValue;
         }
 
         private List<string> ReadList(string key)

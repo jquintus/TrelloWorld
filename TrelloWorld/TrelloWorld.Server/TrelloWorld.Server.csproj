@@ -129,6 +129,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Models\Commit.cs" />
+    <Compile Include="Services\CommitParser.cs" />
     <Compile Include="Services\ICommitParser.cs" />
     <Compile Include="Services\ITrelloController.cs" />
     <Compile Include="Controllers\TrelloController.cs" />

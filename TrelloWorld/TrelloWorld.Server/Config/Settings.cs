@@ -11,5 +11,7 @@
         public string MarkdownRootPath { get; set; }
 
         public List<string> Branches { get; set; }
+
+        public bool IncludeLinkToCommit { get; set; }
     }
 }
