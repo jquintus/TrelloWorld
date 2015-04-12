@@ -33,6 +33,26 @@
         }
 
         [Test]
+        public async Task Post_CommitOnNonMonitoredBranch_DoesNothing()
+        {
+            // Assemble
+            dynamic input = new ExpandoObject();
+            _settings.Branches.Add("not_master");
+
+            var commits = new List<Commit>
+            {
+                new Commit {Message = "msg1", Branch = "master"},
+            };
+            _parser.Setup(p => p.Parse(It.IsAny<object>())).Returns(commits);
+
+            // Act
+            await _controller.Post(input);
+
+            // Assert
+            _service.Verify(s => s.AddComment(It.IsAny<Commit>()), Times.Never);
+        }
+
+        [Test]
         public async Task Post_NoCommits_Throws()
         {
             // Assemble
@@ -59,13 +79,14 @@
         public async Task Post_TwoCommitsWithMessage_CallsAddCommitTwice()
         {
             // Assemble
+            dynamic input = new ExpandoObject();
+            _settings.Branches.Add("master");
+
             var commits = new List<Commit>
             {
-                new Commit {Message = "msg1"},
-                new Commit {Message = "msg2"},
+                new Commit {Message = "msg1", Branch = "master"},
+                new Commit {Message = "msg2", Branch = "master"},
             };
-            dynamic input = new ExpandoObject();
-
             _parser.Setup(p => p.Parse(It.IsAny<object>())).Returns(commits);
 
             // Act
@@ -82,7 +103,10 @@
         {
             _service = new Mock<ITrelloWorldService>();
             _md = new Mock<IMarkdownService>();
-            _settings = new Settings();
+            _settings = new Settings()
+            {
+                Branches = new List<string>(),
+            };
             _parser = new Mock<ICommitParser>();
             _controller = new TrelloControllerService(_settings, _service.Object, _md.Object, _parser.Object);
         }
