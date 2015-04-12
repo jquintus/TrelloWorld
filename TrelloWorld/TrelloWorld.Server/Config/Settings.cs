@@ -4,7 +4,7 @@
 
     public class Settings
     {
-        public const string DEFAULT_CARD_ID_REGEX = @"trello\(\s*(?<cardId>\w+)\s*\)";
+        public const string DEFAULT_CARD_ID_REGEX = @"trello\s*\(\s*(?<cardId>\w+)\s*\)";
 
         public List<string> Branches { get; set; }
 

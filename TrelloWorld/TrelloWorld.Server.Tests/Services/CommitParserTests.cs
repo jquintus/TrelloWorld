@@ -141,6 +141,7 @@
         [TestCase("Comments before the id trello(abc) and after the id", "abc")]
         [TestCase("trello(abc) comments after the id", "abc")]
         [TestCase("trello( abc )", "abc")]
+        [TestCase("trello (abc)", "abc")]
         public void ParseId(string comment, string expected)
         {
             // Act
