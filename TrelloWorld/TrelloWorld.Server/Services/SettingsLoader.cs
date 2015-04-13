@@ -43,7 +43,7 @@
             var value = WebConfigurationManager.AppSettings[key];
             return string.IsNullOrWhiteSpace(value) 
                 ? new List<string>() 
-                : value.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                : value.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).Select(i => i.Trim()).ToList();
         }
 
         private string ReadString(string key, string defaultValue = "")
