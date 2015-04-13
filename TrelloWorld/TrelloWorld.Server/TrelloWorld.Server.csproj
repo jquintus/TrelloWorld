@@ -152,6 +152,7 @@
     <Content Include="MarkdownViews\ConfigureAppKey.md" />
     <Content Include="MarkdownViews\ConfigurationComplete.md" />
     <Content Include="MarkdownViews\ConfigureTrelloToken.md" />
+    <None Include="Properties\PublishProfiles\TrelloWorld - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
