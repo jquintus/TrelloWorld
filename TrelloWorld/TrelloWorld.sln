@@ -10,7 +10,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7CC0432C-05BA-4CF9-B1D6-96E8F53D1525}"
 	ProjectSection(SolutionItems) = preProject
 		..\.travis.yml = ..\.travis.yml
+		LocalTest.bat = LocalTest.bat
 		..\README.md = ..\README.md
+		RemoteTest.bat = RemoteTest.bat
+		SampleCommit.json = SampleCommit.json
 	EndProjectSection
 EndProject
 Global
