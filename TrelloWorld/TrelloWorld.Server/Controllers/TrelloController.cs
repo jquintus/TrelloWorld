@@ -21,9 +21,9 @@ namespace TrelloWorld.Server.Controllers
             return await _service.Get();
         }
 
-        public async Task Post([FromBody]dynamic value)
+        public async Task<HttpResponseMessage> Post([FromBody]dynamic value)
         {
-            await _service.Post(value);
+            return await _service.Post(value);
         }
     }
 }

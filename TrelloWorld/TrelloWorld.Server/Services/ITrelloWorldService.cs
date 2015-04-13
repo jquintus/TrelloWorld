@@ -6,7 +6,7 @@ namespace TrelloWorld.Server.Services
 
     public interface ITrelloWorldService
     {
-        Task AddComment(Commit rawComment);
+        Task<string> AddComment(Commit rawComment);
 
         string AuthUrl { get; }
     }

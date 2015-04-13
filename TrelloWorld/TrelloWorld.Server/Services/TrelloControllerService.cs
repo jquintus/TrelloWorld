@@ -1,5 +1,6 @@
 ﻿namespace TrelloWorld.Server.Services
 {
+    using System.Text;
     using Config;
     using Models;
     using System.Collections;
@@ -47,14 +48,44 @@
             return response;
         }
 
-        public async Task Post([FromBody]dynamic value)
+        public async Task<HttpResponseMessage> Post([FromBody] dynamic value)
         {
+            List<string> urls = await PostInternal(value);
+
+            var content = UrlsToHtml(urls);
+
+            var response = new HttpResponseMessage();
+            response.Content = new StringContent(content);
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
+            return response;
+        }
+
+        private string UrlsToHtml(List<string> urls)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var url in urls.Where(u => !string.IsNullOrWhiteSpace(u)))
+            {
+                sb.AppendLine(url);
+            }
+
+            return sb.ToString();
+        }
+
+
+        private async Task<List<string>> PostInternal(dynamic value)
+        {
+            List<string> urls = new List<string>();
+
             IEnumerable<Commit> commits = _parser.Parse(value);
 
             foreach (var commit in commits.Where(FilterBranch))
             {
-                await _service.AddComment(commit);
+              var url = await _service.AddComment(commit);
+                urls.Add(url);
             }
+
+            return urls;
         }
 
         private bool FilterBranch(Commit c)

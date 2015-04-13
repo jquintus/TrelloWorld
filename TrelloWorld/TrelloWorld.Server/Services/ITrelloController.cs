@@ -6,6 +6,7 @@
     public interface ITrelloController
     {
         Task<HttpResponseMessage> Get();
-        Task Post(dynamic value);
+
+        Task<HttpResponseMessage> Post(dynamic value);
     }
 }

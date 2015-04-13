@@ -7,6 +7,7 @@ using TrelloWorld.Server.Services;
 namespace TrelloWorld.Server.Tests.Services
 {
     using Models;
+    using Server.Config;
 
     [TestFixture]
     public class TrelloServiceTests
@@ -77,17 +78,37 @@ namespace TrelloWorld.Server.Tests.Services
         }
 
 
+        [Test]
+        public void Ctor_CallsAuthorize()
+        {
+            // Assemble
+            var settings = new Settings
+            {
+                Token = "My Token",
+            };
 
+            var asyncTrelloMock = new Mock<IAsyncTrello>();
+            var trelloMock = new Mock<ITrello>();
+
+
+            // Act
+            new TrelloWorldService(trelloMock.Object, asyncTrelloMock.Object, settings);
+
+            // Assert
+            trelloMock.Verify(m => m.Authorize(settings.Token), Times.Once);
+        }
+
+        private Settings _settings;
         [SetUp]
         public void SetUp()
         {
             _cardsMock = new Mock<IAsyncCards>();
             _asyncTrelloMock = new Mock<IAsyncTrello>();
             _TrelloMock = new Mock<ITrello>();
-
+            _settings = new Settings();
             _asyncTrelloMock.SetupGet(t => t.Cards).Returns(_cardsMock.Object);
 
-            _service = new TrelloWorldService(_TrelloMock.Object, _asyncTrelloMock.Object);
+            _service = new TrelloWorldService(_TrelloMock.Object, _asyncTrelloMock.Object, _settings);
         }
     }
 }
