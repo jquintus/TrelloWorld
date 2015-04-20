@@ -151,6 +151,22 @@
             Assert.AreEqual(expected, actual);
         }
 
+        [TestCase(@"trello.com/c/(?<cardId>\w+)/", "https://trello.com/c/abc/1-myTrelloCard", "abc")]
+        [TestCase(@"trello\s*\(\s*(?<cardId>\w+)\s*\)", "Trello(abc)", "abc")]
+        [TestCase(@"trello\s*\(\s*(?<cardId>\w+)\s*\)|trello.com/c/(?<cardId>\w+)/", "https://trello.com/c/abc/1-myTrelloCard", "abc")]
+        [TestCase(@"trello\s*\(\s*(?<cardId>\w+)\s*\)|trello.com/c/(?<cardId>\w+)/", "Trello(abc)", "abc")]
+        public void ParseId_CustomRegex(string regex, string comment, string expected)
+        {
+            // Assemble
+            var parser = new CommitParser(new Settings { CardIdRegex = regex });
+
+            // Act
+            string actual = parser.ParseId(comment);
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
         [Test]
         [TestCase(true, "My message\r\nhttps://github.com/jquintus/spikes/commit/2")]
         [TestCase(false, "My message")]
